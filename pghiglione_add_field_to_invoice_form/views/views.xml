@@ -1,0 +1,29 @@
+<odoo>
+  <data>
+    <record id="account_move_add_custom_field_factura" model="ir.ui.view">
+      <field name="name">account_move_add_custom_field_factura</field>
+      <field name="model">account.move</field>
+      <field name="inherit_id" ref="account.move"/>
+      <field name="arch" type="xml">
+          <field name="payment_reference" position="after">
+              <field name="field_custom_factura" readonly="1"/> 
+          </field>
+      </field>
+  </record>
+
+      <record id="account_move_add_custom_field_factura" model="ir.ui.view">
+      <field name="name">account_move_add_custom_field_factura</field>
+      <field name="model">report_invoice_document</field>
+      <field name="inherit_id" ref="	l10n_ar.report_invoice_document"/>
+      <field name="arch" type="xml">
+           <xpath expr="//span[@t-field='o.invoice_origin']" position="before">
+              <t t-if="o.field_custom_factura">
+                  <br/><strong>Factura manual:</strong>
+                  <span t-field="o.field_custom_factura"/>
+              </t>
+           </xpath>
+      </field>
+  </record>
+
+  </data>
+</odoo>
