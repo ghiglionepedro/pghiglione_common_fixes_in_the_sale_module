@@ -6,7 +6,7 @@ from odoo.exceptions import ValidationError
 class SaleOrderPartnerTypeList(models.Model):
     _inherit = 'sale.order'
 
-    partner_type = fields.Char(string='Customer Type', compute='_compute_partner_type', store=True)
+    partner_type = fields.Char(string='Tipo Cliente', compute='_compute_partner_type', store=True)
 
     @api.depends('partner_id.is_company')
     def _compute_partner_type(self):
