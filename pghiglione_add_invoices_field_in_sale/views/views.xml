@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+    <record id="pghiglione_add_invoices_field_in_sale_list" model="ir.ui.view">
+      <field name="name">pghiglione.add.invoices.field.in.sale.list</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_quotation_tree"/>
+      <field name="arch" type="xml">
+          <field name="currency_id" position="after">
+              <field name="invoice_ids" readonly="1"/> 
+          </field>
+      </field>
+  </record>
+
+  </data>
+</odoo>
