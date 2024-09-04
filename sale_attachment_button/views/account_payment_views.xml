@@ -1,0 +1,16 @@
+<odoo>
+    <record id="view_account_payment_form_inherit" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit.attachments</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_view_attachments"
+                        type="object"
+                        class="oe_highlight"
+                        string="Attachments"
+                        icon="fa-paperclip"/>
+            </header>
+        </field>
+    </record>
+</odoo>

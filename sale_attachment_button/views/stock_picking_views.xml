@@ -1,0 +1,16 @@
+<odoo>
+    <record id="view_stock_picking_form_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.attachments</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_view_attachments"
+                        type="object"
+                        class="oe_highlight"
+                        string="Attachments"
+                        icon="fa-paperclip"/>
+            </header>
+        </field>
+    </record>
+</odoo>
