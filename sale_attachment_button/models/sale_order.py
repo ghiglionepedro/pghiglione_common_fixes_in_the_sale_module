@@ -5,23 +5,22 @@ class SaleOrder(models.Model):
 
     def action_view_attachments(self):
         self.ensure_one()
-        
-        # IDs de las facturas, pagos, y movimientos de stock relacionados
+
         related_invoice_ids = self.invoice_ids.ids
         related_payment_ids = self.invoice_ids.mapped('payment_id').ids
+        related_payment_group_ids = self.invoice_ids.mapped('payment_group_id').ids
         related_picking_ids = self.picking_ids.ids
 
-        # Crear el dominio para buscar los adjuntos relacionados
         domain = [
-            '|', '|', '|',
+            '|', '|', '|', '|',
             ('res_model', '=', 'sale.order'),
             ('res_model', '=', 'account.move'),
             ('res_model', '=', 'account.payment'),
+            ('res_model', '=', 'account.payment.group'),
             ('res_model', '=', 'stock.picking'),
-            ('res_id', 'in', [self.id] + related_invoice_ids + related_payment_ids + related_picking_ids)
+            ('res_id', 'in', [self.id] + related_invoice_ids + related_payment_ids + related_payment_group_ids + related_picking_ids)
         ]
-        
-        # Abrir la vista de adjuntos filtrada
+
         return {
             'name': 'Attachments',
             'type': 'ir.actions.act_window',
