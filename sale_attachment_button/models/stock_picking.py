@@ -25,7 +25,7 @@ class StockPicking(models.Model):
         return {
             'name': 'Attachments',
             'type': 'ir.actions.act_window',
-            'view_mode': 'tree,form',
+            'view_mode': 'kanban,form',
             'res_model': 'ir.attachment',
             'domain': domain,
             'context': dict(self._context),
