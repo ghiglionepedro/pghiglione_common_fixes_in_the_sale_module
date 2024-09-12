@@ -13,12 +13,11 @@ class AccountPaymentGroup(models.Model):
 
         domain = [
             '|', '|', '|', '|',
-            ('res_model', '=', 'account.payment.group'),
-            ('res_model', '=', 'account.payment'),
-            ('res_model', '=', 'account.move'),
-            ('res_model', '=', 'sale.order'),
-            ('res_model', '=', 'stock.picking'),
-            ('res_id', 'in', [self.id] + related_payment_ids + related_invoice_ids + related_sale_order_ids + related_picking_ids)
+            (('res_model', '=', 'account.payment.group'), ('res_id', 'in', [self.id]))
+            (('res_model', '=', 'account.payment'),('res_id', 'in', [related_payment_ids]))
+            (('res_model', '=', 'account.move'),('res_id', 'in', [related_invoice_ids]))
+            (('res_model', '=', 'sale.order'),('res_id', 'in', [related_sale_order_ids]))
+            (('res_model', '=', 'stock.picking'),('res_id', 'in', [related_picking_ids]))
         ]
 
         return {
