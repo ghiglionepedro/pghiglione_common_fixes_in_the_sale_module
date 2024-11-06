@@ -20,26 +20,29 @@ class SaleOrder(models.Model):
         workbook = load_workbook(filename=BytesIO(file_content), data_only=True)
         sheet = workbook.active
 
-        varios_product = self.env['product.product'].search([('name', '=', '-')], limit=1)
+        # Variable para el producto "VARIOS" (asegúrate de tener un producto con este código)
+        varios_product = self.env['product.product'].search([('default_code', '=', 'VARIOS')], limit=1)
         
         if not varios_product:
-            raise UserError(_("Por favor, crea un producto con código '-' para los productos no reconocidos."))
+            raise UserError(_("Por favor, crea un producto con código 'VARIOS' para los productos no reconocidos."))
 
         # Procesar cada fila de la hoja de cálculo, comenzando en la fila 2 para omitir el encabezado
-        for row in range(2, sheet.max_row + 1):
-            # Lee la columna C para la cantidad
-            quantity = sheet.cell(row=row, column=3).value or 1.0
-            
+        for row in range(12, sheet.max_row + 1):
+            # Lee la columna C para la cantidad, verificando que sea un número
+            quantity = sheet.cell(row=row, column=3).value
+            if not isinstance(quantity, (int, float)):
+                quantity = 1.0  # Asigna un valor por defecto si no es numérico
+
             # Lee la columna D para el código de referencia
             code = sheet.cell(row=row, column=4).value
-            
-            # Lee la columna H para el importe por unidad
-            unit_price = sheet.cell(row=row, column=8).value or 0.0
-
-            # Si no hay código de producto, salta esta fila
             if not code:
-                continue
+                continue  # Si no hay código de producto, salta esta fila
             
+            # Lee la columna H para el importe por unidad, verificando que sea un número
+            unit_price = sheet.cell(row=row, column=8).value
+            if not isinstance(unit_price, (int, float)):
+                unit_price = 0.0  # Asigna un valor por defecto si no es numérico
+
             # Busca el producto por su código de referencia
             product = self.env['product.product'].search([('default_code', '=', code)], limit=1)
             
