@@ -20,16 +20,8 @@
         'base',                   # Dependencia básica de Odoo
         'sale',                   # Dependencia para Sales Order
         'stock',                  # Dependencia para Stock Picking
-        'account',                # Dependencia para Invoices y Payments
-        'account_payment_group',  # Dependencia para Payment Groups (si existe en tu Odoo)
     ],
-
-    # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
-        'views/account_move_views.xml',
         'views/sale_order_views.xml',
-        'views/stock_picking_views.xml',
-        'views/account_payment_group_views.xml',
     ],
 }
