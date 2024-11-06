@@ -1,7 +1,7 @@
 from odoo import models, fields, _
 from odoo.exceptions import UserError
 import base64
-import pandas as pd
+from openpyxl import load_workbook  # Para archivos .xlsx
 from io import BytesIO
 
 class SaleOrder(models.Model):
@@ -15,12 +15,13 @@ class SaleOrder(models.Model):
         if not self.excel_file:
             raise UserError(_("Por favor, sube un archivo de Excel antes de continuar."))
 
-        # Convierte el archivo en un DataFrame de pandas para leer el contenido
+        # Convierte el archivo a BytesIO y abre el archivo con openpyxl
         file_content = base64.b64decode(self.excel_file)
-        excel_data = pd.read_excel(BytesIO(file_content), engine='openpyxl')
-        
-        # los códigos de producto están en la columna "D" 
-        reference_codes = excel_data.iloc[:, 3].dropna()  # Columna D (cero indexada)
+        workbook = load_workbook(filename=BytesIO(file_content), data_only=True)
+        sheet = workbook.active
+
+        # Asume que los códigos de producto están en la columna D (columna 4)
+        reference_codes = [sheet.cell(row=row, column=4).value for row in range(2, sheet.max_row + 1)]  # Inicia en la fila 2, omite encabezado
 
         # Variable para el producto "VARIOS" (puedes crear un producto específico si prefieres)
         varios_product = self.env['product.product'].search([('name', '=', '-')], limit=1)
