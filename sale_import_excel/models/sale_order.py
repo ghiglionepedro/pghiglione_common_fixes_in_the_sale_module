@@ -20,30 +20,40 @@ class SaleOrder(models.Model):
         workbook = load_workbook(filename=BytesIO(file_content), data_only=True)
         sheet = workbook.active
 
-        # Asume que los códigos de producto están en la columna D (columna 4)
-        reference_codes = [sheet.cell(row=row, column=4).value for row in range(2, sheet.max_row + 1)]  # Inicia en la fila 2, omite encabezado
-
-        # Variable para el producto "VARIOS" (puedes crear un producto específico si prefieres)
         varios_product = self.env['product.product'].search([('name', '=', '-')], limit=1)
         
         if not varios_product:
-            raise UserError(_("Por favor, crea un producto con nombre '-' para los productos no reconocidos."))
+            raise UserError(_("Por favor, crea un producto con código '-' para los productos no reconocidos."))
 
-        for code in reference_codes:
-            # Busca el producto por código de referencia
+        # Procesar cada fila de la hoja de cálculo, comenzando en la fila 2 para omitir el encabezado
+        for row in range(2, sheet.max_row + 1):
+            # Lee la columna C para la cantidad
+            quantity = sheet.cell(row=row, column=3).value or 1.0
+            
+            # Lee la columna D para el código de referencia
+            code = sheet.cell(row=row, column=4).value
+            
+            # Lee la columna H para el importe por unidad
+            unit_price = sheet.cell(row=row, column=8).value or 0.0
+
+            # Si no hay código de producto, salta esta fila
+            if not code:
+                continue
+            
+            # Busca el producto por su código de referencia
             product = self.env['product.product'].search([('default_code', '=', code)], limit=1)
             
             if not product:
-                # Si no se encuentra el producto, usa "-"
+                # Si no se encuentra el producto, usa "VARIOS"
                 product = varios_product
 
-            # Agrega la línea del producto al pedido
+            # Agrega la línea del producto al pedido con la cantidad y precio extraídos
             self.order_line.create({
                 'order_id': self.id,
                 'product_id': product.id,
                 'name': product.name,
-                'product_uom_qty': 1.0,  # Cantidad (ajustable según necesidades)
-                'price_unit': product.lst_price,  # Precio de lista del producto
+                'product_uom_qty': quantity,  # Cantidad de la columna C
+                'price_unit': unit_price,  # Precio unitario de la columna H
             })
 
         return True
