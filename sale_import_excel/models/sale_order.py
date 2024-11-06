@@ -27,7 +27,7 @@ class SaleOrder(models.Model):
             raise UserError(_("Por favor, crea un producto con código '-' para los productos no reconocidos."))
 
         # Procesar cada fila de la hoja de cálculo, comenzando en la fila 2 para omitir el encabezado
-        for row in range(12, sheet.max_row + 1):
+        for row in range(13, sheet.max_row + 1):
             # Lee la columna C para la cantidad, verificando que sea un número
             quantity = sheet.cell(row=row, column=3).value
             if not isinstance(quantity, (int, float)):
