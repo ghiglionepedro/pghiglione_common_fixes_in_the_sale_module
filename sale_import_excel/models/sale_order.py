@@ -7,7 +7,7 @@ from io import BytesIO
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    excel_file = fields.Binary(string="Archivo Excel")
+    excel_file = fields.Binary(string="Archivo Excel para cargar presupuesto")
     file_name = fields.Char(string="Nombre del Archivo")
 
     def action_import_products_from_excel(self):
@@ -21,10 +21,10 @@ class SaleOrder(models.Model):
         sheet = workbook.active
 
         # Variable para el producto "VARIOS" (asegúrate de tener un producto con este código)
-        varios_product = self.env['product.product'].search([('default_code', '=', 'VARIOS')], limit=1)
+        varios_product = self.env['product.product'].search([('name', '=', '-')], limit=1)
         
         if not varios_product:
-            raise UserError(_("Por favor, crea un producto con código 'VARIOS' para los productos no reconocidos."))
+            raise UserError(_("Por favor, crea un producto con código '-' para los productos no reconocidos."))
 
         # Procesar cada fila de la hoja de cálculo, comenzando en la fila 2 para omitir el encabezado
         for row in range(12, sheet.max_row + 1):
