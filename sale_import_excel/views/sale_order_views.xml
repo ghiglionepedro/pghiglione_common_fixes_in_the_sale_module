@@ -2,12 +2,12 @@
     <record id="view_order_form_inherit_excel_import" model="ir.ui.view">
         <field name="name">sale.order.form.excel.import</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="inherit_id" ref="dusal_sale.dusal_view_order_form"/>
         <field name="arch" type="xml">
             <header>
                 <button name="action_import_products_from_excel" type="object" string="Importar Productos desde Excel" class="oe_highlight" />
             </header>
-            <field name="sheet" position="after">
+            <field name="print_line_number" position="after">
                 <field name="excel_file" widget="binary" filename="file_name"/>
                 <field name="file_name" invisible="1"/>
             </field>

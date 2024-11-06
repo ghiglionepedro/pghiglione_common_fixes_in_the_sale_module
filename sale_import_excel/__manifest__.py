@@ -16,10 +16,8 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': [
-        'base',                   # Dependencia básica de Odoo
-        'sale',                   # Dependencia para Sales Order
-        'stock',                  # Dependencia para Stock Picking
+    'depends': [              # Dependencia para Sales Order
+        'dusal_sale',                  # Dependencia para Stock Picking
     ],
     'data': [
         'views/sale_order_views.xml',
