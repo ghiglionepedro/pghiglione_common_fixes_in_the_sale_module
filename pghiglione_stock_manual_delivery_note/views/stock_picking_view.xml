@@ -8,7 +8,12 @@
             <xpath expr="//field[@name='scheduled_date']" position="after">
                 <field name="manual_delivery_note"
                     placeholder="Ej: 0003-00001234"
-                    required="1"/>
+                    attrs="{
+                        'required': [
+                            ('picking_type_code','=','outgoing'),
+                            ('state','!=','done')
+                        ]
+                    }"/>
             </xpath>
 
         </field>
