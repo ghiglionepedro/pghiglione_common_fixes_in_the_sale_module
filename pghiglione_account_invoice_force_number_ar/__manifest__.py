@@ -6,7 +6,7 @@
     "author": "Quimera Software",
     "depends": [
         "account_invoice_force_number",
-        "l10n_ar"
+        "l10n_ar",
     ],
     "installable": True,
     "application": False,
