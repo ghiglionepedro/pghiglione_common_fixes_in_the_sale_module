@@ -13,7 +13,7 @@ class AccountMove(models.Model):
 
             # Solo validar diarios AFIP
             journal = move.journal_id
-            if not journal.l10n_ar_afip_pos_id:
+            if not journal.l10n_ar_is_pos:
                 continue
 
             # Solo facturas de venta y NC
