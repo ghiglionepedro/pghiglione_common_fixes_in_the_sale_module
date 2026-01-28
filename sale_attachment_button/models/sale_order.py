@@ -11,14 +11,22 @@ class SaleOrder(models.Model):
         related_payment_group_ids = self.invoice_ids.mapped('payment_group_id').ids
         related_picking_ids = self.picking_ids.ids
 
-        domain = [
-            '|', '|', '|', '|',
-            '&',('res_model', '=', 'sale.order'),('res_id', 'in', [self.id]),
-            '&',('res_model', '=', 'account.move'),('res_id', 'in', [related_invoice_ids]),
-            '&',('res_model', '=', 'account.payment'),('res_id', 'in', related_payment_ids),
-            '&',('res_model', '=', 'account.payment.group'),('res_id', 'in', related_payment_group_ids),
-            '&',('res_model', '=', 'stock.picking'),('res_id', 'in', [related_picking_ids]),
-        ]
+        domain = ['|', '|', '|', '|']
+
+        if self.id:
+            domain += ['&', ('res_model', '=', 'sale.order'), ('res_id', '=', self.id)]
+
+        if related_invoice_ids:
+            domain += ['&', ('res_model', '=', 'account.move'), ('res_id', 'in', related_invoice_ids)]
+
+        if related_payment_ids:
+            domain += ['&', ('res_model', '=', 'account.payment'), ('res_id', 'in', related_payment_ids)]
+
+        if related_payment_group_ids:
+            domain += ['&', ('res_model', '=', 'account.payment.group'), ('res_id', 'in', related_payment_group_ids)]
+
+        if related_picking_ids:
+            domain += ['&', ('res_model', '=', 'stock.picking'), ('res_id', 'in', related_picking_ids)]
 
         return {
             'name': 'Attachments',
